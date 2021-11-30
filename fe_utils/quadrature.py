@@ -29,10 +29,12 @@ class QuadratureRule(object):
 
         if self.cell.dim != self.points.shape[1]:
             raise ValueError(
-                "Dimension mismatch between reference cell and quadrature points")
+                "Dimension mismatch between reference cell and quadrature points"
+            )
         if self.points.shape[0] != len(self.weights):
             raise ValueError(
-                "Number of quadrature points and quadrature weights must match")
+                "Number of quadrature points and quadrature weights must match"
+            )
 
     def integrate(self, function):
         """Integrate the function provided using this quadrature rule.
@@ -43,17 +45,16 @@ class QuadratureRule(object):
         The implementation of this method is left as an :ref:`exercise
         <ex-integrate>`.
         """
-
-        raise NotImplementedError
+        return np.dot([f(p) for p in self.points], self.weights)
 
 
 def gauss_quadrature(cell, degree):
     """Return a Gauss-Legendre :class:`QuadratureRule`.
 
-      :param cell: the :class:`~.ReferenceCell` over which this quadrature
-        rule is defined.
-      :param degree: the :ref:`degree of precision <degree-of-precision>`
-        of this quadrature rule.
+    :param cell: the :class:`~.ReferenceCell` over which this quadrature
+      rule is defined.
+    :param degree: the :ref:`degree of precision <degree-of-precision>`
+      of this quadrature rule.
     """
 
     if cell is ReferenceInterval:
@@ -67,9 +68,9 @@ def gauss_quadrature(cell, degree):
         points, weights = leggauss(npoints)
 
         # Numpy uses the [-1, 1] interval, we need to change to [0, 1]
-        points = (points + 1.) / 2.
+        points = (points + 1.0) / 2.0
         # Rescale the weights to sum to 1 instead of 2.
-        weights = weights / 2.
+        weights = weights / 2.0
 
         # We expect points to be an n x dim array.
         points.shape = [points.shape[0], 1]
@@ -80,13 +81,17 @@ def gauss_quadrature(cell, degree):
         p1 = gauss_quadrature(ReferenceInterval, degree + 1)
         q1 = gauss_quadrature(ReferenceInterval, degree)
 
-        points = np.array([(p[0], q[0] * (1 - p[0]))
-                           for p in p1.points
-                           for q in q1.points])
+        points = np.array(
+            [(p[0], q[0] * (1 - p[0])) for p in p1.points for q in q1.points]
+        )
 
-        weights = np.array([p * q * (1 - x[0])
-                            for p, x in zip(p1.weights, p1.points)
-                            for q in q1.weights])
+        weights = np.array(
+            [
+                p * q * (1 - x[0])
+                for p, x in zip(p1.weights, p1.points)
+                for q in q1.weights
+            ]
+        )
 
     else:
         raise ValueError("Unknown reference cell")

@@ -24,24 +24,51 @@ class DrawReferenceTriangle(CellScene):
             nodes = []
             nodes.append(self.anim.caption("Let's start with the reference triangle"))
             for j, v in enumerate(self.cell.vertices):
-                nodes += plt.plot(v[0], v[1], 'ko', markersize=20)
-                nodes.append(self.anim.ax.annotate('(%s, %s)' % (0, j), xy=v, xytext=(10, 10),
-                                                   textcoords='offset points', color="black"))
+                nodes += plt.plot(v[0], v[1], "ko", markersize=20)
+                nodes.append(
+                    self.anim.ax.annotate(
+                        "(%s, %s)" % (0, j),
+                        xy=v,
+                        xytext=(10, 10),
+                        textcoords="offset points",
+                        color="black",
+                    )
+                )
                 self.entities[0][j] = nodes[-1]
-                j0 = min((j+1) % 3, (j+2) % 3)
-                j1 = max((j+1) % 3, (j+2) % 3)
+                j0 = min((j + 1) % 3, (j + 2) % 3)
+                j1 = max((j + 1) % 3, (j + 2) % 3)
                 v0 = self.cell.vertices[j0]
                 v1 = self.cell.vertices[j1]
                 dx = v1 - v0
-                nodes.append(self.anim.ax.annotate("", v0 + .95 * dx, v0 + .05 * dx, arrowprops={"color": "blue",
-                                                                                                 "headlength": 20}))
+                nodes.append(
+                    self.anim.ax.annotate(
+                        "",
+                        v0 + 0.95 * dx,
+                        v0 + 0.05 * dx,
+                        arrowprops={"color": "blue", "headlength": 20},
+                    )
+                )
                 dx_t = np.array([-dx[1], dx[0]])
-                dx_t *= np.sign(np.dot(dx_t, (1, 1))/np.sqrt(np.dot(dx_t, dx_t)))
-                nodes.append(self.anim.ax.annotate('(%s, %s)' % (1, j), xy=(v0 + v1)/2, xytext=15 * dx_t,
-                                                   textcoords='offset points', color="blue"))
+                dx_t *= np.sign(np.dot(dx_t, (1, 1)) / np.sqrt(np.dot(dx_t, dx_t)))
+                nodes.append(
+                    self.anim.ax.annotate(
+                        "(%s, %s)" % (1, j),
+                        xy=(v0 + v1) / 2,
+                        xytext=15 * dx_t,
+                        textcoords="offset points",
+                        color="blue",
+                    )
+                )
                 self.entities[1][j] = nodes[-1]
-            nodes.append(self.anim.ax.annotate('(%s, %s)' % (2, 0), xy=(0.25, 0.25), xytext=(0, 0),
-                                               textcoords='offset points', color="red"))
+            nodes.append(
+                self.anim.ax.annotate(
+                    "(%s, %s)" % (2, 0),
+                    xy=(0.25, 0.25),
+                    xytext=(0, 0),
+                    textcoords="offset points",
+                    color="red",
+                )
+            )
             self.entities[2][0] = nodes[-1]
             self.nodes = nodes[1:]
 
@@ -85,24 +112,39 @@ class DrawP3Triangle(CellScene):
             nodes.append(self.anim.caption("Now the P3 node evaluation points."))
 
             for j, v in enumerate(self.cell.vertices):
-                nodes += plt.plot(v[0], v[1], 'ko', markersize=20)
+                nodes += plt.plot(v[0], v[1], "ko", markersize=20)
 
-                j0 = min(j, (j+1) % 3)
-                j1 = max(j, (j+1) % 3)
+                j0 = min(j, (j + 1) % 3)
+                j1 = max(j, (j + 1) % 3)
                 v0 = self.cell.vertices[j0]
                 v1 = self.cell.vertices[j1]
                 dx = v1 - v0
-                nodes.append(self.anim.ax.annotate("", v0 + .95 * dx, v0 + .05 * dx, arrowprops={"color": "blue",
-                                                                                                 "headlength": 20}))
+                nodes.append(
+                    self.anim.ax.annotate(
+                        "",
+                        v0 + 0.95 * dx,
+                        v0 + 0.05 * dx,
+                        arrowprops={"color": "blue", "headlength": 20},
+                    )
+                )
                 # dx_t = np.array([-dx[1], dx[0]])
                 # dx_t *= np.sign(np.dot(dx_t, (1, 1))/np.sqrt(np.dot(dx_t, dx_t)))
 
-            points = np.array([(ii/3., jj/3) for jj in range(4) for ii in range(4-jj)])
+            points = np.array(
+                [(ii / 3.0, jj / 3) for jj in range(4) for ii in range(4 - jj)]
+            )
             self.pointlabels = []
             for j, p in enumerate(points):
-                nodes += plt.plot(p[0], p[1], 'ko', markersize=20)
-                nodes.append(self.anim.ax.annotate('%s' % j, xy=p, xytext=(10, 10),
-                                                   textcoords='offset points', color="black"))
+                nodes += plt.plot(p[0], p[1], "ko", markersize=20)
+                nodes.append(
+                    self.anim.ax.annotate(
+                        "%s" % j,
+                        xy=p,
+                        xytext=(10, 10),
+                        textcoords="offset points",
+                        color="black",
+                    )
+                )
                 self.pointlabels.append(nodes[-1])
 
             self.nodes = nodes[1:]
@@ -136,9 +178,11 @@ def format_dict(d):
 
 
 class EntityDofScene(Scene):
-    entity_dofs = {0: {0: [0], 1: [3], 2: [9]},
-                   1: {0: [6, 8], 1: [4, 7], 2: [1, 2]},
-                   2: {0: [5]}}
+    entity_dofs = {
+        0: {0: [0], 1: [3], 2: [9]},
+        1: {0: [6, 8], 1: [4, 7], 2: [1, 2]},
+        2: {0: [5]},
+    }
 
     def __init__(self, delay, rt, p3, a):
         super(EntityDofScene, self).__init__(a)
@@ -150,8 +194,12 @@ class EntityDofScene(Scene):
 
     def __call__(self, i):
         if i == 0:
-            text = self.anim.ax.annotate("entity_node = " + format_dict({}), xy=(-.4, 0.1), color="black")
-            self.anim.caption("The entity node list lists the nodes on each entity in order.")
+            text = self.anim.ax.annotate(
+                "entity_node = " + format_dict({}), xy=(-0.4, 0.1), color="black"
+            )
+            self.anim.caption(
+                "The entity node list lists the nodes on each entity in order."
+            )
 
             def iterator():
                 for d in self.entity_dofs:
@@ -160,23 +208,31 @@ class EntityDofScene(Scene):
                         self.current_dofs[d][e] = []
                         # Make rt.entities[d][e] yellow.
                         entity = self.rt.entities[d][e]
-                        ei = 0.
+                        ei = 0.0
                         ec = np.array(to_rgb(entity.get_color()))
-                        entity.set_color((1., 1., 0.))
+                        entity.set_color((1.0, 1.0, 0.0))
                         for dof in self.entity_dofs[d][e]:
                             point = self.p3.pointlabels[dof]
-                            pi = 0.
-                            point.set_color((1., 1., 0.))
+                            pi = 0.0
+                            point.set_color((1.0, 1.0, 0.0))
                             # Make p3 dof yellow.
                             self.current_dofs[d][e].append(dof)
-                            text.set_text("entity_node = " + format_dict(self.current_dofs))
+                            text.set_text(
+                                "entity_node = " + format_dict(self.current_dofs)
+                            )
                             yield [text, entity]
                             for i in range(self.delay):
-                                ei = min(ei+1., self.delay)
-                                pi = min(pi+1., self.delay)
-                                entity.set_color(ei/self.delay*ec + (1 - ei/self.delay)*np.array((1., 1., 0)))
-                                point.set_color((1 - pi/self.delay)*np.array((1., 1., 0)))
+                                ei = min(ei + 1.0, self.delay)
+                                pi = min(pi + 1.0, self.delay)
+                                entity.set_color(
+                                    ei / self.delay * ec
+                                    + (1 - ei / self.delay) * np.array((1.0, 1.0, 0))
+                                )
+                                point.set_color(
+                                    (1 - pi / self.delay) * np.array((1.0, 1.0, 0))
+                                )
                                 yield [text, entity]
+
             self.iterator = iterator()
         return next(self.iterator, None)
 
@@ -212,12 +268,12 @@ a = Animation(fps=30)
 cell = ReferenceTriangle
 
 a.add_scene(Title(a, "Constructing the entity to node mapping"))
-rt = DrawReferenceTriangle(cell, (0., 0.), 1., a)
+rt = DrawReferenceTriangle(cell, (0.0, 0.0), 1.0, a)
 a.add_scene(rt)
-a.add_scene(MorphScene(rt, (.8, .8), 0.66, 2.5))
-p3 = DrawP3Triangle(cell, (0., 0.), 1., a)
+a.add_scene(MorphScene(rt, (0.8, 0.8), 0.66, 2.5))
+p3 = DrawP3Triangle(cell, (0.0, 0.0), 1.0, a)
 a.add_scene(p3)
-a.add_scene(MorphScene(p3, (-.2, .8), 0.66, 2.5))
+a.add_scene(MorphScene(p3, (-0.2, 0.8), 0.66, 2.5))
 a.add_scene(Pause(0.5, a))
 a.add_scene(EntityDofScene(30, rt, p3, a))
 a.save("entity_node.mp4")

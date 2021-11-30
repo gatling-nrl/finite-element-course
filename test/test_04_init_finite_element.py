@@ -1,11 +1,11 @@
-'''Test the creation of the basis function coefficients for lagrange elements.'''
+"""Test the creation of the basis function coefficients for lagrange elements."""
 import pytest
 import numpy as np
 from fe_utils import FiniteElement, ReferenceInterval, ReferenceTriangle
 from fe_utils.finite_elements import vandermonde_matrix
 
 
-@pytest.mark.parametrize('cell', (ReferenceInterval, ReferenceTriangle))
+@pytest.mark.parametrize("cell", (ReferenceInterval, ReferenceTriangle))
 def test_init_finite_element(cell):
 
     nodes = cell.vertices
@@ -14,8 +14,10 @@ def test_init_finite_element(cell):
 
     v = vandermonde_matrix(cell, 1, nodes)
 
-    assert (np.round(np.dot(fe.basis_coefs, v) - np.eye(cell.dim+1)) == 0).all()
+    assert (np.round(np.dot(fe.basis_coefs, v) - np.eye(cell.dim + 1)) == 0).all()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import sys
+
     pytest.main(sys.argv)

@@ -12,7 +12,7 @@ class Animation(object):
     def __init__(self, fps):
 
         self.fps = fps
-        rcParams.update({'font.size': 36})
+        rcParams.update({"font.size": 36})
         self.fig = plt.figure(facecolor="white", edgecolor="white", figsize=(16, 12))
         self.reset()
 
@@ -22,11 +22,11 @@ class Animation(object):
         ax.axes.get_xaxis().set_visible(False)
         ax.axes.get_yaxis().set_visible(False)
 
-        ax.axis(np.add(ax.axis(), [-.5, .5, -.5, .5]))
-        ax.axis('off')
+        ax.axis(np.add(ax.axis(), [-0.5, 0.5, -0.5, 0.5]))
+        ax.axis("off")
 
         self.ax = ax
-        self.txt = plt.figtext(0.5, 0.1, "", horizontalalignment='center', wrap=True)
+        self.txt = plt.figtext(0.5, 0.1, "", horizontalalignment="center", wrap=True)
 
         self.scenes = []
 
@@ -50,8 +50,10 @@ class Animation(object):
             else:
                 ii -= s.frames
 
-    def save(self, filename, extra_args=['-vcodec', 'libx264']):
-        anim = animation.FuncAnimation(self.fig, self, self.frames, init_func=init, interval=1./self.fps)
+    def save(self, filename, extra_args=["-vcodec", "libx264"]):
+        anim = animation.FuncAnimation(
+            self.fig, self, self.frames, init_func=init, interval=1.0 / self.fps
+        )
         anim.save(filename, fps=self.fps, extra_args=extra_args)
 
 
@@ -94,14 +96,16 @@ class Title(Scene):
 
     def __call__(self, i):
         if i == 0:
-            self.txt = plt.figtext(0.5, 0.5, self.text, horizontalalignment='center', wrap=True)
+            self.txt = plt.figtext(
+                0.5, 0.5, self.text, horizontalalignment="center", wrap=True
+            )
         if i > 0:
             self.txt.set_color(str((i + 1) / self.anim.fps))
         if i == self.anim.fps - 1:
             self.txt.set_text("")
             plt.draw()
 
-        return self.txt,
+        return (self.txt,)
 
     @property
     def frames(self):

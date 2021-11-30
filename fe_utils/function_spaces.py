@@ -7,7 +7,6 @@ from matplotlib.tri import Triangulation
 
 
 class FunctionSpace(object):
-
     def __init__(self, mesh, element):
         """A finite element space.
 
@@ -37,9 +36,7 @@ class FunctionSpace(object):
         self.node_count = np.dot(element.nodes_per_entity, mesh.entity_counts)
 
     def __repr__(self):
-        return "%s(%s, %s)" % (self.__class__.__name__,
-                               self.mesh,
-                               self.element)
+        return "%s(%s, %s)" % (self.__class__.__name__, self.mesh, self.element)
 
 
 class Function(object):
@@ -103,7 +100,9 @@ class Function(object):
 
         fs = self.function_space
 
-        d = subdivisions or (2 * (fs.element.degree + 1) if fs.element.degree > 1 else 2)
+        d = subdivisions or (
+            2 * (fs.element.degree + 1) if fs.element.degree > 1 else 2
+        )
 
         if fs.element.cell is ReferenceInterval:
             fig = plt.figure()
@@ -113,7 +112,7 @@ class Function(object):
 
         elif fs.element.cell is ReferenceTriangle:
             fig = plt.figure()
-            ax = fig.gca(projection='3d')
+            ax = fig.gca(projection="3d")
             local_coords, triangles = self._lagrange_triangles(d)
 
         else:
@@ -135,11 +134,12 @@ class Function(object):
 
             if fs.element.cell is ReferenceInterval:
 
-                plt.plot(x[:, 0], v, 'k')
+                plt.plot(x[:, 0], v, "k")
 
             else:
-                ax.plot_trisurf(Triangulation(x[:, 0], x[:, 1], triangles),
-                                v, linewidth=0)
+                ax.plot_trisurf(
+                    Triangulation(x[:, 0], x[:, 1], triangles), v, linewidth=0
+                )
 
         plt.show()
 
@@ -147,20 +147,35 @@ class Function(object):
     def _lagrange_triangles(degree):
         # Triangles linking the Lagrange points.
 
-        return (np.array([[i / degree, j / degree]
-                          for j in range(degree + 1)
-                          for i in range(degree + 1 - j)]),
-                np.array(
-                    # Up triangles
-                    [np.add(np.sum(range(degree + 2 - j, degree + 2)),
-                            (i, i + 1, i + degree + 1 - j))
-                     for j in range(degree)
-                     for i in range(degree - j)]
-                    # Down triangles.
-                    + [np.add(np.sum(range(degree + 2 - j, degree + 2)),
-                              (i+1, i + degree + 1 - j + 1, i + degree + 1 - j))
-                       for j in range(degree - 1)
-                       for i in range(degree - 1 - j)]))
+        return (
+            np.array(
+                [
+                    [i / degree, j / degree]
+                    for j in range(degree + 1)
+                    for i in range(degree + 1 - j)
+                ]
+            ),
+            np.array(
+                # Up triangles
+                [
+                    np.add(
+                        np.sum(range(degree + 2 - j, degree + 2)),
+                        (i, i + 1, i + degree + 1 - j),
+                    )
+                    for j in range(degree)
+                    for i in range(degree - j)
+                ]
+                # Down triangles.
+                + [
+                    np.add(
+                        np.sum(range(degree + 2 - j, degree + 2)),
+                        (i + 1, i + degree + 1 - j + 1, i + degree + 1 - j),
+                    )
+                    for j in range(degree - 1)
+                    for i in range(degree - 1 - j)
+                ]
+            ),
+        )
 
     def integrate(self):
         """Integrate this :class:`Function` over the domain.
